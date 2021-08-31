@@ -1,0 +1,16 @@
+python examples/pytorch/summarization/run_summarization.py \
+    --text_column text \
+    --summary_column summary \
+    --model_name_or_path facebook/bart-large \
+    --do_train \
+    --do_eval \
+    --do_predict \
+    --train_file ~/qa-summarization/amz_qa_sum_train_simple.json \
+    --validation_file ~/qa-summarization/amz_qa_sum_val_simple.json \
+    --test_file ~/qa-summarization/amz_qa_sum_test_simple.json \
+    --source_prefix "summarize: " \
+    --output_dir ~/qa_model/bart-large_output_batch_16 \
+    --overwrite_output_dir \
+    --per_device_train_batch_size=2 \
+    --per_device_eval_batch_size=2 \
+    --predict_with_generate
