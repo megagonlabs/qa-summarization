@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+<head> 
+    <title>Q & A Summary</title>
+    <meta charset="utf-8">
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <script src="popper.min.js"></script>
+    <script src="post_edit_main_template.js"></script>
+    <script src="mturk.js"></script>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <!-- <div class="col-1"></div> -->
+            <div class="col-12">
+                <div id="question_form">
+                    <h1 id="title"> Q & A Summary</h1>
+                    <div id="instruction">
+                        <ul>
+                            <li>In this HIT, you will see <strong class="highlighted">8</strong> question-answer (QA) pairs about <strong class="highlighted">1</strong> Amazon product. You will write a short summary for each QA pair. Please follow the following steps. </li>
+                        </ul>
+                    </div>
+                    <!-- <div class="progress">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="1000" style="width:0%">0%</div>                            
+                    </div>
+                    <p id="prog_count">0% complete</p> -->
+                    <div>
+                        <form>
+                        <h4><strong class="warninfo">Step 1.</strong> Click the <strong class="highlighted">Product ID</strong> to jump to an Amazon product page and have a brief look at the <strong class="highlighted">product information</strong>. Please spend at least 30 seconds.</h4>
+                        <h5 class="prod_cat"><strong>Product Category:   </strong><span id=prod_cat>Office_Products</span></h5>
+                        <h5 class='prod_idx'><strong>Product ID:   </strong><a href="https://www.amazon.com/dp/B000J0CBCQ"><span id="prod_idx">B000J0CBCQ</span></a></h5>
+                        <h4><strong class="warninfo">Step 2.</strong> Read the following question-answer examples <strong class="highlighted">first</strong>.<button type="button" class="error_btn btn btn-sm btn-outline-primary">hide examples</button></h4>
+                        <div id="error_example">
+                            <div class="container-fluid" style="border:1px">
+                                <h4>1. Summarization format should be in <strong class="highlighted">declarative form</strong>. Do not summarize them in <strong class="highlighted">Q & A</strong> format. (e.g. "Q:","A:","?")</h4>
+                                <h5><span class="marked">- For example, with the following Q & A,</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5>Q. Does this oil have a strong fragrance?</h5><h5>A. No it does not.</h5></div>
+                                <h5><span class="marked">- Good summary</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5>This oil does not have a strong fragrance.</h5></div>
+                                <h5><span class="marked">- Bad summary</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5><strong class="warninfo">Q:</strong> Does this oil have a strong fragrance<strong class="warninfo">? A:</strong> No it does not. </h5></div>
+                                <h5><span class="marked">- Note that in the summary, you won’t see any question or answer, but a plain and declarative description of the product.</span></h5>
+                            </div><hr>
+                            <div class="container-fluid" style="border:1px">
+                                <h4>2. <strong class="highlighted">Maintain all useful information</strong>, even if the information may not directly answer the given question.</h4>
+                                <h5><span class="marked">- For example, with the following Q & A,</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5>Q. does the bedding come with it?</h5><h5>A. Yes. <strong class="warninfo">Two little sheets, two pillows, and two pads.</strong></h5></div>
+                                <h5><span class="marked">- The summary could be,</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5>The beddings, including two little sheets, two pillows, and two pads, come with the product.</h5></div>
+                                <h5><span class="marked">- Note that “Two little sheets, two pillows, and two pads” may not directly answer the yes/no question, but this is useful information you should include in your summary.</span></h5>
+                            </div><hr>
+                            <div class="container-fluid" style="border:1px">
+                                <h4>3. <strong class="highlighted">Avoid including personal experience</strong>. Try to exclude personal experience and <strong class="warninfo">do not use first person pronouns</strong> in your summary.</h4>
+                                <h5><span class="marked">- For example, with the following Q & A,</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5>Q: How large of an image can be printed?</h5><h5>A: The width limit is 13 inches, but lengthwise it will print panoramas that are quite long. I have some prints (using rolled paper) that are 44 inches long (i.e.13" x 44"). Most of my large prints are typically 11 x 17 or 13 x 19, or in that general range (depending on crop) as these are more common paper sizes.Hope this helps.</h5></div>
+                                <h5><span class="marked">- The summary could be,</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5>The width limit of this printer is 13 inches. When using rolled papers, it can print panoramas that are quite long, e.g., prints with 44 inches long. It can be used to print common paper sizes, e.g., 11x17, 13x19, or in that general range.</h5></div>
+                                <h5><span class="marked">- Note that in the summary, there is no personal experience descriptions or first person pronouns.</span></h5>
+                            </div><hr>
+                            <div class="container-fluid" style="border:1px">
+                                <h4>4. Summarize <strong class="highlighted">both Q & A </strong>information.</h4>
+                                <h5><span class="marked">- For example, with the following Q & A,</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5>Q: what does it mean when they say it is a 2 - in - 1 set?</h5><h5>A: It’s a domino game plus the chicken game.</h5></div>
+                                <h5><span class="marked">- Good summary</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5>The game is a 2 - in - 1 set because it is a domino game plus the chicken game.</h5></div>
+                                <h5><span class="marked">- Bad summary</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5>It’s a domino game plus the chicken game very fun.</h5></div>
+                            </div><hr>
+                            <div class="container-fluid" style="border:1px">
+                                <h4>5. <strong class="highlighted">Do not use Yes/No</strong> in the summary.</h4>
+                                <h5><span class="marked">- For example, with the following Q & A,</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5>Q: Also, Is the Doll holder removeable?</h5><h5>A: It come unattached. Does not stand alone, sticks into a hole in the bottom.</h5></div>
+                                <h5><span class="marked">- Good summary</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5>The doll holder is unattached. It does not stand alone and stickers into a hole in the bottom.</h5></div>
+                                <h5><span class="marked">- Bad summary</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5><strong class="warninfo">Yes,</strong> it is unattached.</h5></div>
+                            </div><hr>
+                            <div class="container-fluid" style="border:1px">
+                                <h4>6. Refer the product as <strong class="highlighted">"This product" or "This item" instead of "it","that"</strong>.</h4>
+                                <h5><span class="marked">- For example, with the following Q & A,</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5>Q: What age is this appropriate for?</h5><h5>A: For 10 years old up.</h5></div>
+                                <h5><span class="marked">- Good summary</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5><strong class="warninfo">This toy</strong> is appropriate for ages 10 and up.</h5></div>
+                                <h5><span class="marked">- Bad summary</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5><strong class="warninfo">It</strong> is for ages 10 and up.</h5></div>    
+                            </div><hr>
+                            <div class="container-fluid" style="border:1px">
+                                <h4>7. <strong class="highlighted">Do not add additional information not in Q&A</strong>.</h4>
+                                <h5><span class="marked">- For example, with the following Q & A,</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5>Q: Is it’s good for bashing and riding in dirt or nahh....?</h5><h5>A: Tighten all the fasteners with Loctite and then it will be ok to bash.</h5></div>
+                                <h5><span class="marked">- Good summary</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5>This product is ok for bashing or rough rides after securing all fasteners and perhaps even glueing them.</h5></div>
+                                <h5><span class="marked">- Bad summary</span></h5>
+                                <div class="container-fluid" style="border:1px solid #cecece;">
+                                <h5>Strong vehicle construction, secure all fasteners and perhaps even glue them and you can go for rough rides.</h5></div>
+                            </div>
+                        </div><br>
+                        <h4><strong class="warninfo">Step 3.</strong> Please summarize each Q & A pair to provide useful and concrete information for the given product.</h4><h5 class='prod_idx'><strong>Product ID:   </strong><a href="https://www.amazon.com/dp/B000J0CBCQ"><span id="prod_idx">B000J0CBCQ</span></a></h5>
+                            <h5><ul>
+                                <li>You are <strong class="warninfo">not allowed to submit</strong> if you copy Q & A directly. If you <strong class="warninfo">copy or modify</strong> too much from the original Q&A, you will see the an error message, e.g., <strong class="warninfo">"Please edit Q&A summary moderately !!!",</strong> which prevents you to submit your response.</li>
+                                <li>You will be <strong class="warninfo">noticed warnings,</strong> but you can still submit if you think the entered response is correct.</li>
+                            </ul></h5>
+                            <h4><strong>Summary 1 (out of 8 )</strong></h4>
+                        <div class="container-fluid" style="border:1px solid #000000;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class='ques_txt_1'><strong>Q1:   </strong><span>How large of an image can be scanned?</span></h5>
+                                    <h5 class='ans_txt_1'><strong>A1:   </strong><span>Since the 1430 is not a scanner I assume you want to know how large an image can be printed.  The width limit is 13 inches, but lengthwise it will print panoramas that are quite long.  I have some prints (using rolled paper) that are 44 inches long (i.e.13\" x 44\").  Most of my large prints are typically 11 x 17 or 13 x 19, or in that general range (depending on crop) as these are more common paper sizes. Hope this helps.</span></h5>
+                                    <div class="form-group">
+                                        <label for="Textarea1"></label>
+                                        <textarea class="form-control" id="Textarea1" rows="5">How large of an image can be scanned? Since the 1430 is not a scanner I assume you want to know how large an image can be printed.  The width limit is 13 inches, but lengthwise it will print panoramas that are quite long.  I have some prints (using rolled paper) that are 44 inches long (i.e.13\" x 44\").  Most of my large prints are typically 11 x 17 or 13 x 19, or in that general range (depending on crop) as these are more common paper sizes. Hope this helps.</textarea>
+                                    </div>
+                                    <div id="QA_warn1">
+                                        <p><span style="color: green;">0</span> Possible Warning:<p>
+                                        <h6 id="warn1_copy">Copied too much from answer.</h6>
+                                        <h6 id="warn1_ignore">Ignored information in the question.</h6>
+                                        <h6 id="warn1_yes">Contain Yes/No in the summarized text.</h6>
+                                        <h6 id="warn1_self">Not self-contained, e.g. contain "it" instrad of this product.</h6>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <p>1. Summarization format should be in <strong class="highlighted">declarative form</strong>. Do not summarize them in <strong class="highlighted">Q & A</strong> format. (e.g. "Q:","A:","?")</p>
+                                    <p>2. <strong class="highlighted">Maintain all useful information</strong>, even if the information may not directly answer the given question.</p>
+                                    <p>3. <strong class="highlighted">Avoid including personal experience</strong>. Try to exclude personal experience and <strong class="warninfo">do not use first person pronouns</strong> in your summary.</p>
+                                    <p>4. Summarize <strong class="highlighted">both Q & A </strong>information.</p>
+                                    <p>5. <strong class="highlighted">Do not use Yes/No</strong> in the summary.</p>
+                                    <p>6. Refer the product as <strong class="highlighted">"This product" or "This item" instead of "it","that"</strong>.</p>
+                                    <p>7. <strong class="highlighted">Do not add additional information not in Q&A</strong>.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <h4><strong>Summary 2 (out of 8 )</strong></h4>
+                        <div class="container-fluid" style="border:1px solid #000000;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class='ques_txt_2'><strong>Q2:   </strong><span>How large of an image can be scanned?</span></h5>
+                                    <h5 class='ans_txt_2'><strong>A2:   </strong><span>Since the 1430 is not a scanner I assume you want to know how large an image can be printed.  The width limit is 13 inches, but lengthwise it will print panoramas that are quite long.  I have some prints (using rolled paper) that are 44 inches long (i.e.13\" x 44\").  Most of my large prints are typically 11 x 17 or 13 x 19, or in that general range (depending on crop) as these are more common paper sizes. Hope this helps.</span></h5>
+                                    <div class="form-group">
+                                        <label for="Textarea2"></label>
+                                        <textarea class="form-control" id="Textarea2" rows="5">How large of an image can be scanned? Since the 1430 is not a scanner I assume you want to know how large an image can be printed.  The width limit is 13 inches, but lengthwise it will print panoramas that are quite long.  I have some prints (using rolled paper) that are 44 inches long (i.e.13\" x 44\").  Most of my large prints are typically 11 x 17 or 13 x 19, or in that general range (depending on crop) as these are more common paper sizes. Hope this helps.</textarea>
+                                    </div>
+                                    <div id="QA_warn2">
+                                        <p><span style="color: green;">0</span> Possible Warning:<p>
+                                        <h6 id="warn2_copy">Copied too much from answer.</h6>
+                                        <h6 id="warn2_ignore">Ignored information in the question.</h6>
+                                        <h6 id="warn2_yes">Contain Yes/No in the summarized text.</h6>
+                                        <h6 id="warn2_self">Not self-contained, e.g. contain "it" instrad of this product.</h6>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <p>1. Summarization format should be in <strong class="highlighted">declarative form</strong>. Do not summarize them in <strong class="highlighted">Q & A</strong> format. (e.g. "Q:","A:","?")</p>
+                                    <p>2. <strong class="highlighted">Maintain all useful information</strong>, even if the information may not directly answer the given question.</p>
+                                    <p>3. <strong class="highlighted">Avoid including personal experience</strong>. Try to exclude personal experience and <strong class="warninfo">do not use first person pronouns</strong> in your summary.</p>
+                                    <p>4. Summarize <strong class="highlighted">both Q & A </strong>information.</p>
+                                    <p>5. <strong class="highlighted">Do not use Yes/No</strong> in the summary.</p>
+                                    <p>6. Refer the product as <strong class="highlighted">"This product" or "This item" instead of "it","that"</strong>.</p>
+                                    <p>7. <strong class="highlighted">Do not add additional information not in Q&A</strong>.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <h4><strong>Summary 3 (out of 8 )</strong></h4>
+                        <div class="container-fluid" style="border:1px solid #000000;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class='ques_txt_3'><strong>Q3:   </strong><span>How large of an image can be scanned?</span></h5>
+                                    <h5 class='ans_txt_3'><strong>A3:   </strong><span>Since the 1430 is not a scanner I assume you want to know how large an image can be printed.  The width limit is 13 inches, but lengthwise it will print panoramas that are quite long.  I have some prints (using rolled paper) that are 44 inches long (i.e.13\" x 44\").  Most of my large prints are typically 11 x 17 or 13 x 19, or in that general range (depending on crop) as these are more common paper sizes. Hope this helps.</span></h5>
+                                    <div class="form-group">
+                                        <label for="Textarea3"></label>
+                                        <textarea class="form-control" id="Textarea3" rows="5">How large of an image can be scanned? Since the 1430 is not a scanner I assume you want to know how large an image can be printed.  The width limit is 13 inches, but lengthwise it will print panoramas that are quite long.  I have some prints (using rolled paper) that are 44 inches long (i.e.13\" x 44\").  Most of my large prints are typically 11 x 17 or 13 x 19, or in that general range (depending on crop) as these are more common paper sizes. Hope this helps.</textarea>
+                                    </div>
+                                    <div id="QA_warn3">
+                                        <p><span style="color: green;">0</span> Possible Warning:<p>
+                                        <h6 id="warn3_copy">Copied too much from answer.</h6>
+                                        <h6 id="warn3_ignore">Ignored information in the question.</h6>
+                                        <h6 id="warn3_yes">Contain Yes/No in the summarized text.</h6>
+                                        <h6 id="warn3_self">Not self-contained, e.g. contain "it" instrad of this product.</h6>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <p>1. Summarization format should be in <strong class="highlighted">declarative form</strong>. Do not summarize them in <strong class="highlighted">Q & A</strong> format. (e.g. "Q:","A:","?")</p>
+                                    <p>2. <strong class="highlighted">Maintain all useful information</strong>, even if the information may not directly answer the given question.</p>
+                                    <p>3. <strong class="highlighted">Avoid including personal experience</strong>. Try to exclude personal experience and <strong class="warninfo">do not use first person pronouns</strong> in your summary.</p>
+                                    <p>4. Summarize <strong class="highlighted">both Q & A </strong>information.</p>
+                                    <p>5. <strong class="highlighted">Do not use Yes/No</strong> in the summary.</p>
+                                    <p>6. Refer the product as <strong class="highlighted">"This product" or "This item" instead of "it","that"</strong>.</p>
+                                    <p>7. <strong class="highlighted">Do not add additional information not in Q&A</strong>.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <h4><strong>Summary 4 (out of 8 )</strong></h4>
+                        <div class="container-fluid" style="border:1px solid #000000;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class='ques_txt_4'><strong>Q4:   </strong><span>How large of an image can be scanned?</span></h5>
+                                    <h5 class='ans_txt_4'><strong>A4:   </strong><span>Since the 1430 is not a scanner I assume you want to know how large an image can be printed.  The width limit is 13 inches, but lengthwise it will print panoramas that are quite long.  I have some prints (using rolled paper) that are 44 inches long (i.e.13\" x 44\").  Most of my large prints are typically 11 x 17 or 13 x 19, or in that general range (depending on crop) as these are more common paper sizes. Hope this helps.</span></h5>
+                                    <div class="form-group">
+                                        <label for="Textarea4"></label>
+                                        <textarea class="form-control" id="Textarea4" rows="5">How large of an image can be scanned? Since the 1430 is not a scanner I assume you want to know how large an image can be printed.  The width limit is 13 inches, but lengthwise it will print panoramas that are quite long.  I have some prints (using rolled paper) that are 44 inches long (i.e.13\" x 44\").  Most of my large prints are typically 11 x 17 or 13 x 19, or in that general range (depending on crop) as these are more common paper sizes. Hope this helps.</textarea>
+                                    </div>
+                                    <div id="QA_warn4">
+                                        <p><span style="color: green;">0</span> Possible Warning:<p>
+                                        <h6 id="warn4_copy">Copied too much from answer.</h6>
+                                        <h6 id="warn4_ignore">Ignored information in the question.</h6>
+                                        <h6 id="warn4_yes">Contain Yes/No in the summarized text.</h6>
+                                        <h6 id="warn4_self">Not self-contained, e.g. contain "it" instrad of this product.</h6>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <p>1. Summarization format should be in <strong class="highlighted">declarative form</strong>. Do not summarize them in <strong class="highlighted">Q & A</strong> format. (e.g. "Q:","A:","?")</p>
+                                    <p>2. <strong class="highlighted">Maintain all useful information</strong>, even if the information may not directly answer the given question.</p>
+                                    <p>3. <strong class="highlighted">Avoid including personal experience</strong>. Try to exclude personal experience and <strong class="warninfo">do not use first person pronouns</strong> in your summary.</p>
+                                    <p>4. Summarize <strong class="highlighted">both Q & A </strong>information.</p>
+                                    <p>5. <strong class="highlighted">Do not use Yes/No</strong> in the summary.</p>
+                                    <p>6. Refer the product as <strong class="highlighted">"This product" or "This item" instead of "it","that"</strong>.</p>
+                                    <p>7. <strong class="highlighted">Do not add additional information not in Q&A</strong>.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <h4><strong>Summary 5 (out of 8 )</strong></h4>
+                        <div class="container-fluid" style="border:1px solid #000000;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class='ques_txt_5'><strong>Q5:   </strong><span>How large of an image can be scanned?</span></h5>
+                                    <h5 class='ans_txt_5'><strong>A5:   </strong><span>Since the 1430 is not a scanner I assume you want to know how large an image can be printed.  The width limit is 13 inches, but lengthwise it will print panoramas that are quite long.  I have some prints (using rolled paper) that are 44 inches long (i.e.13\" x 44\").  Most of my large prints are typically 11 x 17 or 13 x 19, or in that general range (depending on crop) as these are more common paper sizes. Hope this helps.</span></h5>
+                                    <div class="form-group">
+                                        <label for="Textarea5"></label>
+                                        <textarea class="form-control" id="Textarea5" rows="5">How large of an image can be scanned? Since the 1430 is not a scanner I assume you want to know how large an image can be printed.  The width limit is 13 inches, but lengthwise it will print panoramas that are quite long.  I have some prints (using rolled paper) that are 44 inches long (i.e.13\" x 44\").  Most of my large prints are typically 11 x 17 or 13 x 19, or in that general range (depending on crop) as these are more common paper sizes. Hope this helps.</textarea>
+                                    </div>
+                                    <div id="QA_warn5">
+                                        <p><span style="color: green;">0</span> Possible Warning:<p>
+                                        <h6 id="warn5_copy">Copied too much from answer.</h6>
+                                        <h6 id="warn5_ignore">Ignored information in the question.</h6>
+                                        <h6 id="warn5_yes">Contain Yes/No in the summarized text.</h6>
+                                        <h6 id="warn5_self">Not self-contained, e.g. contain "it" instrad of this product.</h6>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <p>1. Summarization format should be in <strong class="highlighted">declarative form</strong>. Do not summarize them in <strong class="highlighted">Q & A</strong> format. (e.g. "Q:","A:","?")</p>
+                                    <p>2. <strong class="highlighted">Maintain all useful information</strong>, even if the information may not directly answer the given question.</p>
+                                    <p>3. <strong class="highlighted">Avoid including personal experience</strong>. Try to exclude personal experience and <strong class="warninfo">do not use first person pronouns</strong> in your summary.</p>
+                                    <p>4. Summarize <strong class="highlighted">both Q & A </strong>information.</p>
+                                    <p>5. <strong class="highlighted">Do not use Yes/No</strong> in the summary.</p>
+                                    <p>6. Refer the product as <strong class="highlighted">"This product" or "This item" instead of "it","that"</strong>.</p>
+                                    <p>7. <strong class="highlighted">Do not add additional information not in Q&A</strong>.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <h4><strong>Summary 6 (out of 8 )</strong></h4>
+                        <div class="container-fluid" style="border:1px solid #000000;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class='ques_txt_6'><strong>Q6:   </strong><span>How large of an image can be scanned?</span></h5>
+                                    <h5 class='ans_txt_6'><strong>A6:   </strong><span>Since the 1430 is not a scanner I assume you want to know how large an image can be printed.  The width limit is 13 inches, but lengthwise it will print panoramas that are quite long.  I have some prints (using rolled paper) that are 44 inches long (i.e.13\" x 44\").  Most of my large prints are typically 11 x 17 or 13 x 19, or in that general range (depending on crop) as these are more common paper sizes. Hope this helps.</span></h5>
+                                    <div class="form-group">
+                                        <label for="Textarea6"></label>
+                                        <textarea class="form-control" id="Textarea6" rows="5">How large of an image can be scanned? Since the 1430 is not a scanner I assume you want to know how large an image can be printed.  The width limit is 13 inches, but lengthwise it will print panoramas that are quite long.  I have some prints (using rolled paper) that are 44 inches long (i.e.13\" x 44\").  Most of my large prints are typically 11 x 17 or 13 x 19, or in that general range (depending on crop) as these are more common paper sizes. Hope this helps.</textarea>
+                                    </div>
+                                    <div id="QA_warn6">
+                                        <p><span style="color: green;">0</span> Possible Warning:<p>
+                                        <h6 id="warn6_copy">Copied too much from answer.</h6>
+                                        <h6 id="warn6_ignore">Ignored information in the question.</h6>
+                                        <h6 id="warn6_yes">Contain Yes/No in the summarized text.</h6>
+                                        <h6 id="warn6_self">Not self-contained, e.g. contain "it" instrad of this product.</h6>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <p>1. Summarization format should be in <strong class="highlighted">declarative form</strong>. Do not summarize them in <strong class="highlighted">Q & A</strong> format. (e.g. "Q:","A:","?")</p>
+                                    <p>2. <strong class="highlighted">Maintain all useful information</strong>, even if the information may not directly answer the given question.</p>
+                                    <p>3. <strong class="highlighted">Avoid including personal experience</strong>. Try to exclude personal experience and <strong class="warninfo">do not use first person pronouns</strong> in your summary.</p>
+                                    <p>4. Summarize <strong class="highlighted">both Q & A </strong>information.</p>
+                                    <p>5. <strong class="highlighted">Do not use Yes/No</strong> in the summary.</p>
+                                    <p>6. Refer the product as <strong class="highlighted">"This product" or "This item" instead of "it","that"</strong>.</p>
+                                    <p>7. <strong class="highlighted">Do not add additional information not in Q&A</strong>.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <h4><strong>Summary 7 (out of 8 )</strong></h4>
+                        <div class="container-fluid" style="border:1px solid #000000;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class='ques_txt_7'><strong>Q7:   </strong><span>How large of an image can be scanned?</span></h5>
+                                    <h5 class='ans_txt_7'><strong>A7:   </strong><span>Since the 1430 is not a scanner I assume you want to know how large an image can be printed.  The width limit is 13 inches, but lengthwise it will print panoramas that are quite long.  I have some prints (using rolled paper) that are 44 inches long (i.e.13\" x 44\").  Most of my large prints are typically 11 x 17 or 13 x 19, or in that general range (depending on crop) as these are more common paper sizes. Hope this helps.</span></h5>
+                                    <div class="form-group">
+                                        <label for="Textarea7"></label>
+                                        <textarea class="form-control" id="Textarea7" rows="5">How large of an image can be scanned? Since the 1430 is not a scanner I assume you want to know how large an image can be printed.  The width limit is 13 inches, but lengthwise it will print panoramas that are quite long.  I have some prints (using rolled paper) that are 44 inches long (i.e.13\" x 44\").  Most of my large prints are typically 11 x 17 or 13 x 19, or in that general range (depending on crop) as these are more common paper sizes. Hope this helps.</textarea>
+                                    </div>
+                                    <div id="QA_warn7">
+                                        <p><span style="color: green;">0</span> Possible Warning:<p>
+                                        <h6 id="warn7_copy">Copied too much from answer.</h6>
+                                        <h6 id="warn7_ignore">Ignored information in the question.</h6>
+                                        <h6 id="warn7_yes">Contain Yes/No in the summarized text.</h6>
+                                        <h6 id="warn7_self">Not self-contained, e.g. contain "it" instrad of this product.</h6>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <p>1. Summarization format should be in <strong class="highlighted">declarative form</strong>. Do not summarize them in <strong class="highlighted">Q & A</strong> format. (e.g. "Q:","A:","?")</p>
+                                    <p>2. <strong class="highlighted">Maintain all useful information</strong>, even if the information may not directly answer the given question.</p>
+                                    <p>3. <strong class="highlighted">Avoid including personal experience</strong>. Try to exclude personal experience and <strong class="warninfo">do not use first person pronouns</strong> in your summary.</p>
+                                    <p>4. Summarize <strong class="highlighted">both Q & A </strong>information.</p>
+                                    <p>5. <strong class="highlighted">Do not use Yes/No</strong> in the summary.</p>
+                                    <p>6. Refer the product as <strong class="highlighted">"This product" or "This item" instead of "it","that"</strong>.</p>
+                                    <p>7. <strong class="highlighted">Do not add additional information not in Q&A</strong>.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <h4><strong>Summary 8 (out of 8 )</strong></h4>
+                        <div class="container-fluid" style="border:1px solid #000000;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class='ques_txt_8'><strong>Q8:   </strong><span>How large of an image can be scanned?</span></h5>
+                                    <h5 class='ans_txt_8'><strong>A8:   </strong><span>Since the 1430 is not a scanner I assume you want to know how large an image can be printed.  The width limit is 13 inches, but lengthwise it will print panoramas that are quite long.  I have some prints (using rolled paper) that are 44 inches long (i.e.13\" x 44\").  Most of my large prints are typically 11 x 17 or 13 x 19, or in that general range (depending on crop) as these are more common paper sizes. Hope this helps.</span></h5>
+                                    <div class="form-group">
+                                        <label for="Textarea8"></label>
+                                        <textarea class="form-control" id="Textarea8" rows="5">How large of an image can be scanned? Since the 1430 is not a scanner I assume you want to know how large an image can be printed.  The width limit is 13 inches, but lengthwise it will print panoramas that are quite long.  I have some prints (using rolled paper) that are 44 inches long (i.e.13\" x 44\").  Most of my large prints are typically 11 x 17 or 13 x 19, or in that general range (depending on crop) as these are more common paper sizes. Hope this helps.</textarea>
+                                    </div>
+                                    <div id="QA_warn8">
+                                        <p><span style="color: green;">0</span> Possible Warning:<p>
+                                        <h6 id="warn8_copy">Copied too much from answer.</h6>
+                                        <h6 id="warn8_ignore">Ignored information in the question.</h6>
+                                        <h6 id="warn8_yes">Contain Yes/No in the summarized text.</h6>
+                                        <h6 id="warn8_self">Not self-contained, e.g. contain "it" instrad of this product.</h6>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <p>1. Summarization format should be in <strong class="highlighted">declarative form</strong>. Do not summarize them in <strong class="highlighted">Q & A</strong> format. (e.g. "Q:","A:","?")</p>
+                                    <p>2. <strong class="highlighted">Maintain all useful information</strong>, even if the information may not directly answer the given question.</p>
+                                    <p>3. <strong class="highlighted">Avoid including personal experience</strong>. Try to exclude personal experience and <strong class="warninfo">do not use first person pronouns</strong> in your summary.</p>
+                                    <p>4. Summarize <strong class="highlighted">both Q & A </strong>information.</p>
+                                    <p>5. <strong class="highlighted">Do not use Yes/No</strong> in the summary.</p>
+                                    <p>6. Refer the product as <strong class="highlighted">"This product" or "This item" instead of "it","that"</strong>.</p>
+                                    <p>7. <strong class="highlighted">Do not add additional information not in Q&A</strong>.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="submit_panel">
+                            <div id="warning"></div>
+                            <button type="button" class="btn btn-block btn-outline-info" id="submit_btn"><span>0</span>/8 Done. You need to answer all 8 questions to submit.</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+                <p style="text-align: center;">Please <strong>Contact Us</strong> if you have any problems. <strong>Email:</strong> txh357@gmail.com</p><br>
+                <!-- <div id="data_info"><span></span></div> -->
+                <form id="mturk_form">
+                    <input type="hidden" name="answer" id="answer">
+                </form>
+            </div>
+            <!-- <div class="col-1"></div> -->
+        </div>
+    </div>
+</body>
+</html>

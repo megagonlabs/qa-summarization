@@ -1,0 +1,141 @@
+#title {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#instruction{
+    font-size: 16pt;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#warning {
+    font-size: 10pt;
+    font-weight: bold;
+    color: red;
+    text-align: center;
+    height: 20px;
+    margin-bottom: 10px;
+}
+
+#submit_panel {
+    margin-top: 5px;
+    margin-bottom: 30px;
+    display: none;
+}
+
+.prod_cat{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.prod_idx{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.ques_txt{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.ans_txt{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.highlighted {
+    font-weight: bold;
+    background: yellow;
+}
+
+
+#check_quality_radio .custom-radio{
+    margin: 15px;
+    margin-left: 0px;
+}
+
+#select_prime_type_radio .custom-radio{
+    margin: 15px;
+    margin-left: 0px;
+}
+
+#question_form{
+    margin-top: 20px
+}
+
+#feedback{
+    margin-top: 20px
+}
+
+#note{
+    margin-top: 10px
+}
+#data_info{
+    margin: 15px
+}
+
+p{
+    color: green;
+    font-size: 15pt;
+}
+
+.custom-checkbox{
+    margin: 10px;
+}
+
+.error_btn{
+    margin: 10px;
+    cursor:pointer;
+}
+
+textarea{
+  width:100%;
+}
+
+img {  
+    max-height: 100%;  
+    max-width: 100%; 
+    width: auto;
+    height: auto;
+    margin-top: 10px;
+}
+
+.img_src {
+    max-height: 500px;
+    border: 1px solid black;
+    padding: 10px;
+    /*max-width: 80%; */
+}
+
+.sample_type_img {
+    max-height: 200px;
+    max-width: 200px;
+}
+.sample_error_img {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.frame {  
+    height: 500px; /*can be anything*/
+    width: 500px; /*can be anything*/
+    position: relative;
+}
+
+.grid-container_fig {
+  display: grid;
+  grid-template-columns: auto auto;
+  /*justify-content: center;*/
+  margin-bottom: 20px;
+}
+
+.grid-item {
+  /*background-color: rgba(255, 255, 255, 0.8);*/
+  border: 1px solid black;
+  /*padding: -10px;*/
+  /*font-size: 30px;*/
+  justify-content: center;
+  text-align: center;
+}
+
