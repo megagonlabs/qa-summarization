@@ -9,3 +9,10 @@ QA summary
 
 **"qa_annotated_summary_full.json":** QA rewrite data include error evaluation
 
+**"model_config.txt":** transformer-based model training script. Reference Hugginface [summarization repo](https://github.com/huggingface/transformers/tree/master/examples/pytorch/summarization). 
+
+**"sample_data":** data format for transformer-based model experiment.
+
+**"transformer_summarization.py":** main part for transformer-based model experiment. Further modification needed.
+
+**"baseline_summerize.py":** unsuperived methods (e.g. lexrank, sumbasic) and evaluation. 
