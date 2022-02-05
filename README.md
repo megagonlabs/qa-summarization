@@ -75,7 +75,7 @@ The JSON schema is described below.
 
 (*1) Each dictionary in `qa_pair` has either `annotation` or `post_collection`.  If one has `annotation`, the QA pair was shown to annotators for the first QA rewriting task. If an entry does not have `annotation`, it means that the entry was collected through the QA-pair enrichment step. Then, the entry should have `post_collection`, which contains the original QA pair ID and the method that were used to collect the entry. 
 
-```
+```json
 [
     {
         "asin": "B000FCURJC"
@@ -141,6 +141,25 @@ The JSON schema is described below.
 ]
 ```
 
+## Sample code
+
+```python
+import json
+
+products = json.load(open(filepath))
+for product in products:
+    # Input QA pairs
+    input_qa_pairs = []
+    for qa_pair in product["qa_pair"]:
+        input_qa_pairs.append({"Q": qa_pair["question"],
+                                "A": qa_pair["answer"] })
+
+    # Generate a summary from QA pairs
+    generated_summary = summarizer(input_qa_pairs)
+
+    # Reference summaries
+    reference_summaries = product["summary"]
+```
 
 ## Dataset Statistics
 
