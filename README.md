@@ -17,7 +17,7 @@ QA summary
 
 **"baseline_summerize.py":** unsuperived methods (e.g. lexrank, sumbasic) and evaluation. 
 
-**train_led.py:** Fine-tuned LED Pretrained Model. Trained with our own training data.
+**"train_led.py":** Fine-tuned LED Pretrained Model. Trained with our own training data.
 
 ----
 
