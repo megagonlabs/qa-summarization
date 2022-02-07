@@ -12,7 +12,7 @@ from glob import glob
 from functools import reduce
 from itertools import islice
 from collections import Counter
-from sumeval.metrics.rouge import RougeCalculator
+#from sumeval.metrics.rouge import RougeCalculator
 from tqdm import tqdm
 from nltk.tokenize import word_tokenize, sent_tokenize
 
@@ -360,11 +360,50 @@ def data_statistic(qa_summary):
 	print('avg. all QA pairs length (sents):',round(sum(sam_txt)/len(sam_txt),2))
 	print('avg. gold summary length (sents):',round(sum(g_sum)/len(g_sum),2))            
 
+def load_data():
+    with open('amazon_qa_summary_filtered.json','r',encoding='utf-8') as infile:
+        data = json.load(infile)
+        print(len(data))
+        for each_item in data:
+            qa_pairs = each_item['qa_pair']
+            print(len(qa_pairs))
+            for qa_pair in qa_pairs:
+                print('Q:',qa_pair['question'])
+                print('A:',qa_pair['answer'])
+            exit()
+
+def split_data():
+    with open('amazon_qa_dataset/amazon_qa_summary_filtered.json','r',encoding='utf-8') as infile:
+        data = json.load(infile)
+        print(len(data))
+        nums_of_data = len(data)
+        random.shuffle(data)
+        train_data = data[:int(nums_of_data*0.8)]
+        val_data = data[int(nums_of_data*0.8):int(nums_of_data*0.9)]
+        test_data = data[int(nums_of_data*0.9):]
+        #print(len(train_data),train_data[:3])
+        #print(len(val_data),val_data[:3])
+        #print(len(test_data),test_data[:3])
+        data_list = [train_data, val_data, test_data]
+    
+    with open('qa_summary_filtered_train.json', 'w', encoding='utf-8') as outfile:
+        json.dump(train_data, outfile, indent=2)
+    
+    with open('qa_summary_filtered_val.json', 'w', encoding='utf-8') as outfile:
+        json.dump(val_data, outfile, indent=2)
+    
+    with open('qa_summary_filtered_test.json', 'w', encoding='utf-8') as outfile:
+        json.dump(test_data, outfile, indent=2)
+    
 
 if __name__ == "__main__":
 
-	create_qa_dataset()
-	# merge_qa_summary()
+    split_data()
+    exit()
+    load_data()
+	#exit()
+    #create_qa_dataset()
+    # merge_qa_summary()
 	# best_rewrite()
 	# eval_4_standard()
 	# mturk_annotation_to_json()
