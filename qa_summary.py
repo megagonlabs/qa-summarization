@@ -14,7 +14,7 @@
 # limitations under the License.
 
 # Lint as: python3
-"""Scientific Papers Dataset."""
+"""Amazon QA Dataset."""
 
 
 import json
@@ -37,10 +37,10 @@ Amazon QA summarization datasets contains two sets of long and structured docume
 
 
 class AmazonQAConfig(datasets.BuilderConfig):
-    """BuilderConfig for Scientific Papers."""
+    """BuilderConfig for Amazon QA dataset."""
 
     def __init__(self, filename=None, **kwargs):
-        """BuilderConfig for ScientificPapers
+        """BuilderConfig for QA data
 
         Args:
           filename: filename of different configs for the dataset.
@@ -101,6 +101,6 @@ class AmazonQA(datasets.GeneratorBasedBuilder):
                 input_qa_text = input_qa_text.replace("<S>"," ").replace("<S>","")
                 yield product["asin"], {
                     "qa_pairs_text":input_qa_text,
-                    "summary":product["summary"]
+                    "summary":product["summary"][0]
                 }
 

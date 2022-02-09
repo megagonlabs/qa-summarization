@@ -10,28 +10,20 @@ from transformers import (
 # load rouge
 rouge = load_metric("rouge")
 
-# load pubmed
+# load qa dataset
 qa_summary_train = load_dataset("qa_summary.py", ignore_verifications=True, split="train")
 qa_summary_val = load_dataset("qa_summary.py", ignore_verifications=True, split="validation")
 
-#print(len(qa_summary_train))
-#print(len(qa_summary_val))
-
-# comment out following lines for a test run
-#qa_summary_train = qa_summary_train.select(range(32))
-#qa_summary_val = qa_summary_val.select(range(32))
-
-#print(qa_summary_train)
-#print(qa_summary_val)
-#exit()
+#print(len(qa_sum_train))
+#print(len(qa_sum_val))
 
 # load tokenizer
 tokenizer = AutoTokenizer.from_pretrained("allenai/led-large-16384")
 
 # max encoder length is 8192 for PubMed
-encoder_max_length = 3096
-decoder_max_length = 1000
-batch_size = 16
+encoder_max_length = 3072
+decoder_max_length = 512
+batch_size = 2
 
 
 def process_data_to_model_inputs(batch):
@@ -105,15 +97,16 @@ training_args = Seq2SeqTrainingArguments(
     per_device_train_batch_size=batch_size,
     per_device_eval_batch_size=batch_size,
     fp16=True,
-    half_precision_backend="auto",
+    half_precision_backend='auto',
     #fp16_backend="apex",
-    output_dir="output",
+    output_dir="/dgxhome/txh357/qa-summarization/checkpoint/",
     logging_steps=250,
     eval_steps=5000,
     save_steps=500,
     warmup_steps=1500,
     save_total_limit=2,
     gradient_accumulation_steps=4,
+    num_train_epochs=30,
 )
 
 

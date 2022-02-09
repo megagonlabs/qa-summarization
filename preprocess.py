@@ -361,16 +361,30 @@ def data_statistic(qa_summary):
 	print('avg. gold summary length (sents):',round(sum(g_sum)/len(g_sum),2))            
 
 def load_data():
-    with open('amazon_qa_summary_filtered.json','r',encoding='utf-8') as infile:
+    with open('amazon_qa_dataset/amazon_qa_summary_filtered.json','r',encoding='utf-8') as infile:
         data = json.load(infile)
         print(len(data))
+        total_summary = []
+        word_cnt = 0
+        max_len = 0
         for each_item in data:
-            qa_pairs = each_item['qa_pair']
-            print(len(qa_pairs))
-            for qa_pair in qa_pairs:
-                print('Q:',qa_pair['question'])
-                print('A:',qa_pair['answer'])
-            exit()
+           # qa_pairs = each_item['qa_pair']
+           # print(len(qa_pairs))
+           # for qa_pair in qa_pairs:
+           #     print('Q:',qa_pair['question'])
+           #     print('A:',qa_pair['answer'])
+            #print(len(each_item['summary']))
+            total_summary += each_item['summary']
+            for each_sum in each_item['summary']:
+                word_cnt += len(each_sum)
+                max_len = max(len(each_sum), max_len)
+                print(max_len)
+                exit()
+        print(len(total_summary))
+        print(word_cnt)
+        print(word_cnt/len(total_summary))
+        print(max_len)
+        exit()
 
 def split_data():
     with open('amazon_qa_dataset/amazon_qa_summary_filtered.json','r',encoding='utf-8') as infile:
@@ -398,9 +412,9 @@ def split_data():
 
 if __name__ == "__main__":
 
-    split_data()
-    exit()
     load_data()
+    exit()
+    split_data()
 	#exit()
     #create_qa_dataset()
     # merge_qa_summary()
