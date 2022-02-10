@@ -7,8 +7,8 @@ from transformers import LEDTokenizer, LEDForConditionalGeneration
 qa_summary_test = load_dataset("qa_summary.py", ignore_verifications=True, split="test")
 
 # load tokenizer & model from checkpoint
-tokenizer = LEDTokenizer.from_pretrained("{name}/led-large-16384-pubmed")
-model = LEDForConditionalGeneration.from_pretrained("{name}/led-large-16384-pubmed").to("cuda").half()
+tokenizer = LEDTokenizer.from_pretrained("{name}/led-large-16384")
+model = LEDForConditionalGeneration.from_pretrained("{name}/led-large-16384").to("cuda").half()
 
 
 def generate_answer(batch):
