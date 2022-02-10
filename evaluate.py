@@ -4,7 +4,6 @@ from datasets import load_dataset, load_metric
 from transformers import LEDTokenizer, LEDForConditionalGeneration
 
 # load qa dataset
-#pubmed_test = load_dataset("scientific_papers", "pubmed", ignore_verifications=True, split="test")
 qa_summary_test = load_dataset("qa_summary.py", ignore_verifications=True, split="test")
 
 # load tokenizer & model from checkpoint
