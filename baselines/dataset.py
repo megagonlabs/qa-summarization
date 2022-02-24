@@ -42,6 +42,7 @@ class QASumDataModule(LightningDataModule):
             qa_list: question1 answer1-1 answer1-2, ...
         """
 
+        super().__init__()
         self.tokenizer = tokenizer
 
         if json_filepath is None:
@@ -70,14 +71,17 @@ class QASumDataModule(LightningDataModule):
         self.batch_size = batch_size
 
     def _preprocess_function(self, example):
+        # The input_ids, attention_mask, labels will be converted into torch.Tensor using datasets.set_format later
         model_inputs = self.tokenizer(example["input_data"],
                                       max_length=self.max_input_length,
+                                      padding="max_length",
                                       truncation=True)
 
         # Setup the tokenizer for targets
-        with tokenizer.as_target_tokenizer():
-            labels = self.tokenizer(example["summary_list"][0],  # Use only first correction
+        with self.tokenizer.as_target_tokenizer():
+            labels = self.tokenizer(example["summary_list"][0],  # Use only first summary
                                     max_length=self.max_target_length,
+                                    padding="max_length",
                                     truncation=True)
 
         model_inputs["labels"] = labels["input_ids"]
@@ -137,18 +141,24 @@ class QASumDataModule(LightningDataModule):
         train_idx = int(len(self.data_df) * 0.6)
         valid_idx = int(len(self.data_df) * 0.8)
 
-        self.train_data_df = self.data_df.iloc[:train_idx]
-        self.valid_data_df = self.data_df.iloc[train_idx:valid_idx]
-        self.test_data_df  = self.data_df.iloc[valid_idx:]
+        self.train_data_df = self.data_df.iloc[:train_idx][["input_data", "summary_list"]]
+        self.valid_data_df = self.data_df.iloc[train_idx:valid_idx][["input_data", "summary_list"]]
+        self.test_data_df  = self.data_df.iloc[valid_idx:][["input_data", "summary_list"]]
 
         # Dataset.from_pandas(df)
-        self.train_dataset = datasets.Dataset.from_pandas(self.train_data_df)
-        self.valid_dataset = datasets.Dataset.from_pandas(self.valid_data_df)
-        self.test_dataset = datasets.Dataset.from_pandas(self.test_data_df)
+        self.train_dataset = datasets.Dataset.from_pandas(self.train_data_df, preserve_index=False)
+        self.valid_dataset = datasets.Dataset.from_pandas(self.valid_data_df, preserve_index=False)
+        self.test_dataset = datasets.Dataset.from_pandas(self.test_data_df, preserve_index=False)
 
-        self.train_dataset = self.train_dataset.map(self._preprocess_function)
-        self.valid_dataset = self.valid_dataset.map(self._preprocess_function)
-        self.test_dataset = self.test_dataset.map(self._preprocess_function)
+        self.train_dataset = self.train_dataset.map(self._preprocess_function,
+                                                    remove_columns=["input_data", "summary_list"])
+        self.train_dataset.set_format(type="torch", columns=["input_ids", "attention_mask", "labels"])                                           
+        self.valid_dataset = self.valid_dataset.map(self._preprocess_function,
+                                                    remove_columns=["input_data", "summary_list"])
+        self.valid_dataset.set_format(type="torch", columns=["input_ids", "attention_mask", "labels"])                                           
+        self.test_dataset = self.test_dataset.map(self._preprocess_function,
+                                                  remove_columns=["input_data", "summary_list"])
+        self.test_dataset.set_format(type="torch", columns=["input_ids", "attention_mask", "labels"])                                           
 
     def setup(self, stage: Optional[str] = None):
         pass
@@ -165,8 +175,24 @@ class QASumDataModule(LightningDataModule):
         return DataLoader(self.test_dataset,
                 batch_size=self.batch_size)
 
+    @staticmethod
+    def collate_fn(batch):
+        """
+        Groups multiple examples into one batch with padding and tensorization.
+        The collate function is called by PyTorch DataLoader
+        """
+        pad_token_id = 1
+        input_ids, output_ids = list(zip(*batch))
+        input_ids = torch.nn.utils.rnn.pad_sequence(input_ids, batch_first=True, padding_value=pad_token_id)
+        output_ids = torch.nn.utils.rnn.pad_sequence(output_ids, batch_first=True, padding_value=pad_token_id)
+        return input_ids, output_ids
+        
 
 if __name__ == "__main__":
     tokenizer = AutoTokenizer.from_pretrained("t5-base")
     dm = QASumDataModule(tokenizer)
     dm.prepare_data()
+
+    # dataset.set_format(type='torch', columns=['input_ids', 'token_type_ids', 'attention_mask', 'label'])
+
+    dl = DataLoader(dm.train_dataset, batch_size=8)
