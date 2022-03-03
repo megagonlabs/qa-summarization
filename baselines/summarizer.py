@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader, Dataset
 from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, set_seed, get_linear_schedule_with_warmup
 import rouge
 
-from dataset import QASumDataModule
+from dataset import QASumDataModule, QASumPreSplitDataModule
 
 
 """
@@ -34,6 +34,17 @@ class Summarizer(pl.LightningModule):
         if self.args.model_name in ["allenai/led-base-16384"]:
             config.attention_window = [self.args.attention_window] * len(config.attention_window)
         self.model = AutoModelForSeq2SeqLM.from_pretrained(self.args.model_name, config=config)
+
+        # TODO: Hard-coded =================================
+        # set generate hyperparameters
+        self.model.config.num_beams = 4
+        self.model.config.max_length = 512
+        self.model.config.min_length = 100
+        self.model.config.length_penalty = 2.0
+        self.model.config.early_stopping = True
+        self.model.config.no_repeat_ngram_size = 3
+        # ==================================================
+
         print("model load done")
 
         # Load tokenizer and metric
@@ -48,13 +59,19 @@ class Summarizer(pl.LightningModule):
                                         limit_length=False,
                                         apply_avg=True,
                                         stemming=True, ensure_compatibility=True)
-        self.bert_scorer = bert_score.BERTScorer(model_type="microsoft/deberta-xlarge-mnli",
-                                                lang="en", rescale_with_baseline=True)
+        # self.bert_scorer = bert_score.BERTScorer(model_type="microsoft/deberta-xlarge-mnli",
+        #                                          lang="en", rescale_with_baseline=True)
+        self.bert_scorer = bert_score.BERTScorer(lang="en", rescale_with_baseline=True)        
 
         # Load dataset
+        """
         # TODO: How to pass other args (**self.args ?)
         self.dm = QASumDataModule(tokenizer=self.tokenizer,
                                   batch_size=self.args.batch_size)
+        """
+        print(self.args)
+        self.dm = QASumPreSplitDataModule(tokenizer=self.tokenizer,
+                                          **vars(self.args))
         self.dm.prepare_data()
 
     def _set_global_attention_mask(self, input_ids):
@@ -89,6 +106,7 @@ class Summarizer(pl.LightningModule):
 #                          global_attention_mask=self._set_global_attention_mask(input_ids),  # set global attention
 #                          labels=output_ids, use_cache=False)
     def forward(self, **batch):
+        # TODO(Yoshi): LED global_attention_mask
         return self.model(**batch)
 
     def training_step(self, batch, batch_nb):
@@ -129,9 +147,12 @@ class Summarizer(pl.LightningModule):
 
         output_ids = batch["labels"]
         del batch["labels"]  # Patchy way to not pass labels to generate()
+        """
         generated_ids = self.model.generate(**batch, use_cache=True,
                                             max_length=self.args.max_output_len,
                                             num_beams=self.args.num_beams)
+        """
+        generated_ids = self.model.generate(**batch, use_cache=True)
 
         # Convert predicted and gold token ids to strings
         predictions = self.tokenizer.batch_decode(generated_ids.tolist(), skip_special_tokens=True)
@@ -165,8 +186,15 @@ class Summarizer(pl.LightningModule):
         """Store generated summaries for test examples"""
         # TODO(Yoshi): We should keep product ID to be consistent with other methods.
         all_generations = [ll for l in output_results for ll in l]
+        summary_lists = self.dm.test_data_df["summary_list"]
+        assert len(all_generations) == len(summary_lists)
+        all_outputs = []
+        for pred, ref in zip(all_generations, summary_lists):
+            all_outputs.append({"pred": pred,
+                                "ref": ref})
         with open(os.path.join(self.args.log_output_subdir, "test_generations.json"), "w") as fout:
-            json.dump(all_generations, fout)
+            json.dump(all_outputs, fout)
+
         # TODO: self.log does not support text data
         # self.log("test_generations", json.dumps(all_generations))
 
@@ -199,13 +227,15 @@ if __name__ == "__main__":
     main_arg_parser = argparse.ArgumentParser(description="QA summarization")
     main_arg_parser.add_argument("--model_name", default="allenai/led-base-16384")
     parser = Summarizer.add_model_specific_args(main_arg_parser)
+    parser = QASumPreSplitDataModule.add_dataset_specific_args(parser)
     args = parser.parse_args()
 
     # TODO(Yoshi): Add dataset name and directory later
     # At this moment, this code simply uses a fixed split. 
 
     # Create a tagname
-    tagname = f"{args.model_name}__bs={args.batch_size}__ep={args.epochs}__nb={args.num_beams}"
+    model_pathname = args.model_name.replace("/", "--")
+    tagname = f"{model_pathname}__bs={args.batch_size}__ep={args.epochs}__nb={args.num_beams}"
     log_output_dir = os.path.join(args.log_output_basedir, tagname)
     if not os.path.exists(log_output_dir):
         os.makedirs(log_output_dir)

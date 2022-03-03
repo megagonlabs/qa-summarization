@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     with open(sys.argv[1]) as fin:
         score_dict = json.load(fin)[0]
-        scores = [str(score_dict[name]) for name in score_names]
+        scores = [str(score_dict[name] * 100) for name in score_names]
         print(" ".join(scores))
 
 
