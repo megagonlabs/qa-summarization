@@ -378,8 +378,6 @@ def load_data():
             for each_sum in each_item['summary']:
                 word_cnt += len(each_sum)
                 max_len = max(len(each_sum), max_len)
-                print(max_len)
-                exit()
         print(len(total_summary))
         print(word_cnt)
         print(word_cnt/len(total_summary))
@@ -408,14 +406,45 @@ def split_data():
     
     with open('qa_summary_filtered_test.json', 'w', encoding='utf-8') as outfile:
         json.dump(test_data, outfile, indent=2)
+   
+def json2txt():
     
+    with open('amazon_qa_dataset/qa_summary_filtered_test.json','r',encoding='utf-8') as infile:    
+        data = json.load(infile)
+        print(len(data))
+        
+        with open('hyps.txt','w',encoding='utf-8') as outfile:
+            for each in data:
+                outfile.write(each['summary'][0])
+                outfile.write('\n')
+        
+        with open('refs.txt','w',encoding='utf-8') as outfile:
+            for each in data:
+                input_qa_pairs = []
+                for qa_pair in each["qa_pair"]:
+                    input_qa_pairs.append(qa_pair["question"].replace('\n',' '))
+                    input_qa_pairs.append(qa_pair["answer"].replace('\n',' '))
+                input_qa_text = " ".join(input_qa_pairs)
+                outfile.write(input_qa_text)
+                outfile.write('\n')
+
+def get_data_index():
+    
+    with open('amazon_qa_dataset/qa_summary_filtered_test.json', 'r', encoding='utf-8') as outfile:
+        data = json.load(outfile)
+        prod_id = []
+        for item in data:
+            prod_id.append(item['asin'])
+        pprint(prod_id)
+        exit()
 
 if __name__ == "__main__":
-
-    load_data()
+    
+    json2txt()
     exit()
+    get_data_index()
+    load_data()
     split_data()
-	#exit()
     #create_qa_dataset()
     # merge_qa_summary()
 	# best_rewrite()
