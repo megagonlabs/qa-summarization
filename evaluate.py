@@ -84,11 +84,11 @@ def analysis(sentence_list):
 
 def split_train_data():
     
-    #with open('amazon_qa_dataset/qa_summary_filtered_train.json') as f:
-    with open('amazon_qa_dataset/ratio_data/qa_summary_filtered_train_80%.json') as f:
+    with open('amazon_qa_dataset/qa_summary_filtered_train.json') as f:
+    #with open('amazon_qa_dataset/ratio_data/qa_summary_filtered_train_80%.json') as f:
         data = json.loads(f.read())
         print(len(data))
-        exit()
+        #exit()
         random.shuffle(data)
         total = len(data)
         #single = int(len(data)/4)
