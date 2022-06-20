@@ -84,21 +84,26 @@ def analysis(sentence_list):
 
 def split_train_data():
     
-    with open('amazon_qa_dataset/qa_summary_filtered_train.json') as f:
+    #with open('amazon_qa_dataset/qa_summary_filtered_train.json') as f:
+    with open('amazon_qa_dataset/ratio_data/qa_summary_filtered_train_80%.json') as f:
         data = json.loads(f.read())
         print(len(data))
+        exit()
         random.shuffle(data)
-        single = int(len(data)/4)
-        print(single)
+        total = len(data)
+        #single = int(len(data)/4)
     
-    with open('amazon_qa_dataset/qa_summary_filtered_train_20%.json','w') as f:
-        json.dump(data[:single], f, indent=2)
+    with open('amazon_qa_dataset/ratio_data/qa_summary_filtered_train_20%.json','w') as f:
+        json.dump(data[:int(total*0.2)], f, indent=2)
 
-    with open('amazon_qa_dataset/qa_summary_filtered_train_40%.json','w') as f:
-        json.dump(data[:single*2], f, indent=2)
+    with open('amazon_qa_dataset/ratio_data/qa_summary_filtered_train_40%.json','w') as f:
+        json.dump(data[:int(total*0.4)], f, indent=2)
     
-    with open('amazon_qa_dataset/qa_summary_filtered_train_60%.json','w') as f:
-        json.dump(data[:single*3], f, indent=2)
+    with open('amazon_qa_dataset/ratio_data/qa_summary_filtered_train_60%.json','w') as f:
+        json.dump(data[:int(total*0.6)], f, indent=2)
+    
+    with open('amazon_qa_dataset/ratio_data/qa_summary_filtered_train_80%.json','w') as f:
+        json.dump(data[:int(total*0.8)], f, indent=2)
         
         #one = [each['asin'] for each in data[:single]]
         #two = [each['asin'] for each in data[:single*2]]
@@ -374,12 +379,12 @@ def eval_bert_scores(pred, ref):
 
 if __name__ == "__main__":
    
-    split_data_cat()
+    #split_data_cat()
     #get_data_from_datasets(qa_summary_test)
     #fast_abs_eval()
     #fast_abs_result()
     #single_pairs_result()
     #single_pairs_eval()
-    #split_train_data()
+    split_train_data()
     #get_data_from_raw()
     #analysis()

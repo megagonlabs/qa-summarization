@@ -1,3 +1,7 @@
+# folder
+fast_abs_rl
+fast_abs_rl_backup
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
