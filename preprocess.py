@@ -15,6 +15,8 @@ from collections import Counter
 #from sumeval.metrics.rouge import RougeCalculator
 from tqdm import tqdm
 from nltk.tokenize import word_tokenize, sent_tokenize
+	
+seed(7)
 
 def longestCommonSubsequence(s1, s2):
 
