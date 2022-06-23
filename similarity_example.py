@@ -9,7 +9,7 @@ import nltk
 from nltk.util import ngrams # This is the ngram magic.
 from textblob import TextBlob
 
-NGRAM = 4
+#NGRAM = 4
 
 re_sent_ends_naive = re.compile(r'[.\n]')
 re_stripper_alpha = re.compile('[^a-zA-Z]+')
@@ -51,7 +51,8 @@ def jaccard_distance(a, b):
     """Calculate the jaccard distance between sets A and B"""
     a = set(a)
     b = set(b)
-    return 1 - len(a&b)/len(a|b)
+    return 1 - len(a&b)/len(a)
+    #return 1 - len(a&b)/len(a|b)
     #return 1.0 * len(a&b)/len(a|b)
 
 def cosine_similarity_ngrams(a, b):
@@ -70,7 +71,7 @@ def cosine_similarity_ngrams(a, b):
     return float(numerator) / denominator
 
 
-def test(a, b):
+def test(summary, qa_pairs):
     #paragraph = """It was the best of times, it was the worst of times.
     #           It was the age of wisdom? It was the age of foolishness!
     #           I first met Dr. Frankenstein in Munich; his monster was, presumably, at home."""
@@ -85,8 +86,8 @@ def test(a, b):
 
     #a = get_tuples_nltk_punkt_sentences(a)
     #b = get_tuples_nltk_punkt_sentences(b)
-    a = get_tuples_textblob_sentences(a)
-    b = get_tuples_textblob_sentences(b)
+    a = get_tuples_textblob_sentences(summary)
+    b = get_tuples_textblob_sentences(qa_pairs)
     #print("Jaccard: {}   Cosine: {}".format(jaccard_distance(a,b), cosine_similarity_ngrams(a,b)))
 
     #a = get_tuples_nosentences("Above is a bad example of four-gram similarity.")

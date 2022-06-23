@@ -10,7 +10,7 @@ from transformers import LEDTokenizer, LEDForConditionalGeneration
 from statistics import median, mean
 
 # load qa dataset
-#qa_summary_test = load_dataset("qa_summary.py", ignore_verifications=True, split="test")
+qa_summary_test = load_dataset("qa_summary.py", ignore_verifications=True, split="test")
 #qa_summary_train = load_dataset("qa_summary.py", ignore_verifications=True, split="train")
 
 # load tokenizer & model from checkpoint
@@ -145,7 +145,7 @@ def get_postedit_data():
         data = json.loads(f.read())
         print(len(data))
         cnt = 0
-        summary, qa_pairs, qa_edit_pairs ques, ans = [], [], [], [], []
+        summary, qa_pairs, qa_edit_pairs, ques, ans = [], [], [], [], []
         qa_w_cnt, qa_r_w_cnt, sum_w_cnt = [], [], []
         for product in data:
             #pprint(product)
@@ -163,7 +163,7 @@ def get_postedit_data():
                             qa_edit_pairs.append(edit['edit'])
 
     with open('amazon_qa_dataset/ratio_data/qa_summary_filtered_postedit_train.json','w') as f:
-        json.dump(data[, f, indent=2)
+        json.dump(data, f, indent=2)
 
 def get_data_from_raw():
     
@@ -314,12 +314,15 @@ def evaluate(all_references, all_hypothesis):
 
         for metric, results in sorted(scores.items(), key=lambda x: x[0]):
             if not apply_avg and not apply_best: # value is a type of list as we evaluate each summary vs each reference
-                for hypothesis_id, results_per_ref in enumerate(results):
-                    nb_references = len(results_per_ref['p'])
-                    for reference_id in range(nb_references):
-                        print('\tHypothesis #{} & Reference #{}: '.format(hypothesis_id, reference_id))
-                        print('\t' + prepare_results(metric,results_per_ref['p'][reference_id], results_per_ref['r'][reference_id], results_per_ref['f'][reference_id]))
-                print()
+                try:
+                    for hypothesis_id, results_per_ref in enumerate(results):
+                        nb_references = len(results_per_ref['p'])
+                        for reference_id in range(nb_references):
+                            print('\tHypothesis #{} & Reference #{}: '.format(hypothesis_id, reference_id))
+                            print('\t' + prepare_results(metric,results_per_ref['p'][reference_id], results_per_ref['r'][reference_id], results_per_ref['f'][reference_id]))
+                    print()
+                except:
+                    continue
             else:
                 print(prepare_results(metric, results['p'], results['r'], results['f']))
         print()     
@@ -336,8 +339,8 @@ def load_data(data_list):
             summary_list.append(text)
     return summary_list
 
-ref_dirs = '/data01/tingyao/qa-summarization/fast_abs_rl/amazon_qa_dataset/finished_files/refs/test'
-pred_dirs = '/data01/tingyao/qa-summarization/fast_abs_rl/decoded'
+decode_path = '/data01/tingyao/qa-summarization/fast_abs_rl/decoded'
+ref_dirs = '/data01/tingyao/qa-summarization/fast_abs_rl/amazon_qa_dataset/all_qa/finished_files_all_train/refs/test'
 
 def fast_abs_result():
     
@@ -352,25 +355,27 @@ def fast_abs_result():
     #print('ref:',len(references))
     #print()
     references = get_data_from_datasets(qa_summary_test)    
-    for beam in ['beam_1', 'beam_5']:
-        pred_list = os.listdir(os.path.join(pred_dirs,beam)+'/output')
-        pred_list = sorted(pred_list, key=lambda x:int(x.split('.')[0]))
-        pred_list = [os.path.join(pred_dirs,beam)+'/output/'+each for each in pred_list] 
-        if beam == 'beam_1':
-            hypo_1 = load_data(pred_list)
-            #hypo_1 = [each[0] for each in hypo_1]
-        else:
-            hypo_5 = load_data(pred_list)
-            #hypo_5 = [each[0] for each in hypo_5]
-    
-    fast_abs_list = []
-    for (r1, h1, h5) in zip(references, hypo_1, hypo_5):
-        fast_abs_list.append({"pred (beam = 1)":h1, 
-                              "pred (beam = 5)":h5,
-                              "ref":r1})
-    
-    with open('fast_abs_rl.json','w',encoding='utf-8') as outfile:
-        json.dump(fast_abs_list, outfile, indent=2)
+    for pred_dirs in os.listdir(decode_path):
+        print(pred_dirs)
+        for beam in ['beam_1', 'beam_5']:
+            pred_list = os.listdir(os.path.join(decode_path,pred_dirs,beam)+'/output')
+            pred_list = sorted(pred_list, key=lambda x:int(x.split('.')[0]))
+            pred_list = [os.path.join(decode_path,pred_dirs,beam)+'/output/'+each for each in pred_list] 
+            if beam == 'beam_1':
+                hypo_1 = load_data(pred_list)
+                #hypo_1 = [each[0] for each in hypo_1]
+            else:
+                hypo_5 = load_data(pred_list)
+                #hypo_5 = [each[0] for each in hypo_5]
+        
+        fast_abs_list = []
+        for (r1, h1, h5) in zip(references, hypo_1, hypo_5):
+            fast_abs_list.append({"pred (beam = 1)":h1, 
+                                  "pred (beam = 5)":h5,
+                                  "ref":r1})
+        
+        with open('fast_abs_rl_'+pred_dirs+'.json','w',encoding='utf-8') as outfile:
+            json.dump(fast_abs_list, outfile, indent=2)
     
     #print(len(hypo_1))
     #print(len(hypo_5))
@@ -379,21 +384,25 @@ def fast_abs_result():
     #evaluate(references, hypo_5)
 
 def fast_abs_eval():
-    with open('fast_abs_rl.json') as infile:
-        data = json.loads(infile.read())
-        print(len(data))
-        ref_list, pred_1, pred_5 = [], [], []
-        for each in data:
-            ref_list.append([each['ref']])
-            pred_1.append(each['pred (beam = 1)'])
-            pred_5.append(each['pred (beam = 5)'])
+    for pred_dirs in os.listdir(decode_path):
+        #with open('fast_abs_rl.json') as infile:
+        with open('fast_abs_rl_'+pred_dirs+'.json') as infile:
+            data = json.loads(infile.read())
+            print(pred_dirs, len(data))
+            ref_list, pred_1, pred_5 = [], [], []
+            for each in data:
+                ref_list.append([each['ref']])
+                pred_1.append(each['pred (beam = 1)'])
+                pred_5.append(each['pred (beam = 5)'])
    
-    print(len(ref_list))
-    print(len(pred_1))
-    print(len(pred_5))
-    #evaluate(ref_list, pred_1)
-    #evaluate(ref_list, pred_5)
-    eval_bert_scores(pred_5, ref_list)
+        print(len(ref_list), len(pred_1), len(pred_5))
+        evaluate(ref_list, pred_1)
+        print('=============')
+        evaluate(ref_list, pred_5)
+        print('=============')
+        eval_bert_scores(pred_1, ref_list)
+        print('=============')
+        eval_bert_scores(pred_5, ref_list)
 
 def single_pairs_result():
     path = '/home/txh357/tingyao/summarization-sing-pair-mix/logs/amazon_qa_pg_bert_both'
@@ -445,10 +454,10 @@ if __name__ == "__main__":
    
     #split_data_cat()
     #get_data_from_datasets(qa_summary_test)
-    #fast_abs_eval()
+    fast_abs_eval()
     #fast_abs_result()
     #single_pairs_result()
     #single_pairs_eval()
     #split_train_data()
-    get_data_from_raw()
+    #get_data_from_raw()
     #analysis()
