@@ -2,6 +2,7 @@ import os
 import json, rouge
 import collections, random
 import torch
+from tqdm import tqdm
 from pprint import pprint
 from nltk.tokenize import sent_tokenize, word_tokenize
 from datasets import load_dataset, load_metric
@@ -64,23 +65,35 @@ def huggingface_rouge():
 
 vocab_counter = collections.Counter()
 
-def analysis(sentence_list):
+#def analysis(sentence_list):
+#
+#    token_list = []
+#    for sent in sentence_list:
+#        #token_list.append(len(word_tokenize(sent)))
+#        tokens = word_tokenize(sent)
+#        vocab_counter.update(tokens)
+#
+#    #token_list = sorted(token_list, key=lambda x:x)
+#    #mean = sum(token_list)/len(token_list)
+#    #_max = max(token_list)
+#    #_min = min(token_list)
+#    #a = token_list[int(len(token_list)*0.8)]
+#    #b = token_list[int(len(token_list)*0.9)]
+#    #c = token_list[int(len(token_list)*0.99)]
+#    #print(mean, _min, _max, a, b, c)
+#    #print(token_list[:3], len(token_list))
 
-    token_list = []
-    for sent in sentence_list:
-        #token_list.append(len(word_tokenize(sent)))
-        tokens = word_tokenize(sent)
-        vocab_counter.update(tokens)
-
-    #token_list = sorted(token_list, key=lambda x:x)
-    #mean = sum(token_list)/len(token_list)
-    #_max = max(token_list)
-    #_min = min(token_list)
-    #a = token_list[int(len(token_list)*0.8)]
-    #b = token_list[int(len(token_list)*0.9)]
-    #c = token_list[int(len(token_list)*0.99)]
-    #print(mean, _min, _max, a, b, c)
-    #print(token_list[:3], len(token_list))
+def analysis(tokens_list, total):
+    tokens_list = sorted(tokens_list)
+    print(tokens_list[:50],len(tokens_list))
+    mean = sum(tokens_list)/len(tokens_list)
+    _max = max(tokens_list)
+    _min = min(tokens_list)
+    a = tokens_list[int(len(tokens_list)*0.8)]
+    b = tokens_list[int(len(tokens_list)*0.9)]
+    c = tokens_list[int(len(tokens_list)*0.95)]
+    print(mean, _min, _max, a, b, c)
+    print("std of arr : ", np.std(tokens_list))
 
 def split_train_data():
     
@@ -126,7 +139,33 @@ def split_data_cat():
             with open('amazon_qa_dataset/cat_data/qa_summary_filtered_'+cat.lower()+'.json','w') as outfile:
                 json.dump(each_cat_data, outfile, indent=2)
 
-def get_data_from_raw(i):
+def get_postedit_data():
+    
+    with open('amazon_qa_dataset/amazon_qa_summary_filtered.json') as f:
+        data = json.loads(f.read())
+        print(len(data))
+        cnt = 0
+        summary, qa_pairs, qa_edit_pairs ques, ans = [], [], [], [], []
+        qa_w_cnt, qa_r_w_cnt, sum_w_cnt = [], [], []
+        for product in data:
+            #pprint(product)
+            # input QA pairs
+            for each in product["summary"]:
+                cnt += 1
+                summary.append(each) 
+            for qa_pair in product["qa_pair"]:
+                qa_pairs.append(qa_pair["question"]+" "+qa_pair["answer"])
+                ques.append(qa_pair["question"])
+                ans.append(qa_pair["answer"])
+                if 'annotation' in qa_pair:
+                    for edit in qa_pair['annotation']['rewrite']:
+                        if edit['is_selected']=='True':
+                            qa_edit_pairs.append(edit['edit'])
+
+    with open('amazon_qa_dataset/ratio_data/qa_summary_filtered_postedit_train.json','w') as f:
+        json.dump(data[, f, indent=2)
+
+def get_data_from_raw():
     
     with open('amazon_qa_dataset/amazon_qa_summary_filtered.json') as f:
     #with open('amazon_qa_summary_nofilter.json') as f:
@@ -134,22 +173,47 @@ def get_data_from_raw(i):
         print(len(data))
         category = sorted(list(set([each['category'] for each in data])))
         print(category)
-        summary, qa_pairs, ques, ans = [], [], [], []
-        #cnt_list = []
+        to_qa, to_re, to_sum = 0, 0, 0
         cnt = 0
-        for product in data:
-            # input QA pairs
-            if product['category'] == category[i]:
-                cnt += 1
+        for cat in category:
+            print(cat)
+            summary, qa_pairs, ques, ans = [], [], [], []
+            qa_w_cnt, qa_r_w_cnt, sum_w_cnt = [], [], []
+            for product in data:
                 #pprint(product)
-                for each in product["summary"]:
-                    summary.append(each) 
-                for qa_pair in product["qa_pair"]:
-                    qa_pairs.append(qa_pair["question"]+" "+qa_pair["answer"])
-                    ques.append(qa_pair["question"])
-                    ans.append(qa_pair["answer"])
-                #cnt_list.append(cnt)
+                # input QA pairs
+                if product['category'] == cat:
+                    qa_pairs, qa_re, summary = [], [], []
+                    #pprint(product)
+                    for each in product["summary"]:
+                        cnt += 1
+                        summary.append(each) 
+                    for qa_pair in product["qa_pair"]:
+                        qa_pairs.append(qa_pair["question"]+" "+qa_pair["answer"])
+                        ques.append(qa_pair["question"])
+                        ans.append(qa_pair["answer"])
+                        if 'annotation' in qa_pair:
+                            for edit in qa_pair['annotation']['rewrite']:
+                                if edit['is_selected']=='True':
+                                    qa_re.append(edit['edit'])
+
+                    qa_w_cnt.append(len(word_tokenize(' '.join(qa_pairs))))
+                    sum_w_cnt += [len(word_tokenize(each)) for each in summary]
+                    qa_r_w_cnt.append(len(word_tokenize(' '.join(qa_re))))
+          
+            to_qa += sum(qa_w_cnt)
+            to_re += sum(qa_r_w_cnt)
+            to_sum += sum(sum_w_cnt)
+            #print(len(qa_w_cnt),cnt)
+            #print('avg. qa length:',round(sum(qa_w_cnt)/cnt,2))
+            #print('avg. qa rewrite length:',round(sum(qa_r_w_cnt)/cnt,2))
+            #print('avg. summary length:',round(sum(sum_w_cnt)/len(sum_w_cnt),2))
     
+    print('avg. qa length:',round(to_qa/len(data),2))
+    print('avg. qa rewrite length:',round(to_re/len(data),2))
+    print('avg. summary length:',round(to_sum/cnt,2))
+    print(cnt)
+    exit()
     print(len(ques), len(set(ques)))
     qw_cnt = [len(word_tokenize(each)) for each in list(set(ques))]
     aw_cnt = [len(word_tokenize(each)) for each in ans]
@@ -385,6 +449,6 @@ if __name__ == "__main__":
     #fast_abs_result()
     #single_pairs_result()
     #single_pairs_eval()
-    split_train_data()
-    #get_data_from_raw()
+    #split_train_data()
+    get_data_from_raw()
     #analysis()
