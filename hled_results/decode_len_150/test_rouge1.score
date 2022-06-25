@@ -1,0 +1,5 @@
+rouge1 = 46.82
+rouge2 = 21.20
+rougeL = 28.00
+rougeLsum = 44.37
+ext_rouge2_prec = 5.11
