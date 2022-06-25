@@ -373,9 +373,10 @@ def fast_abs_result():
             fast_abs_list.append({"pred (beam = 1)":h1, 
                                   "pred (beam = 5)":h5,
                                   "ref":r1})
-        
-        with open('fast_abs_rl_'+pred_dirs+'.json','w',encoding='utf-8') as outfile:
-            json.dump(fast_abs_list, outfile, indent=2)
+       
+        if pred_dirs == 'model_60_train':
+            with open('fast_abs_rl_'+pred_dirs+'.json','w',encoding='utf-8') as outfile:
+                json.dump(fast_abs_list, outfile, indent=2)
     
     #print(len(hypo_1))
     #print(len(hypo_5))
@@ -396,11 +397,11 @@ def fast_abs_eval():
                 pred_5.append(each['pred (beam = 5)'])
    
         print(len(ref_list), len(pred_1), len(pred_5))
-        evaluate(ref_list, pred_1)
+        #evaluate(ref_list, pred_1)
         print('=============')
         evaluate(ref_list, pred_5)
         print('=============')
-        eval_bert_scores(pred_1, ref_list)
+        #eval_bert_scores(pred_1, ref_list)
         print('=============')
         eval_bert_scores(pred_5, ref_list)
 
