@@ -22,7 +22,7 @@ QA summary
 ----
 
 
-# CoolDatasetName
+# CoQASUM
 
 This respository hosts a benchmark dataset for QA summarization. 
 
