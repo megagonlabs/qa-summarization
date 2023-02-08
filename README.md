@@ -1,34 +1,29 @@
-# MegagonLabs_QA_summarization
-QA summary
-
-**"amazon_qa_filtered_5_150_8q.csv":** selected 8 QA pairs for rewrite
-
-**"amazon_qa_summary_all.json":** QA summary include augmented data and mturk rewrite
-
-**"mturk_best_rewrite.json":** best QA rewrite data
-
-**"qa_annotated_summary_full.json":** QA rewrite data include error evaluation
-
-**"model_config.txt":** transformer-based model training script. Reference Hugginface [summarization repo](https://github.com/huggingface/transformers/tree/master/examples/pytorch/summarization). 
-
-**"sample_data":** data format for transformer-based model experiment.
-
-**"transformer_summarization.py":** main part for transformer-based model experiment. Further modification needed.
-
-**"baseline_summerize.py":** unsuperived methods (e.g. lexrank, sumbasic) and evaluation. 
-
-**"train_led.py":** Fine-tuned LED Pretrained Model. Trained with our own training data.
-
-----
-
-
 # CoQASUM
 
-This respository hosts a benchmark dataset for QA summarization. 
+<!-- This is the repo for paper Semantic Frame Forecasting (NAACL 2021). -->
+This respository hosts a benchmark dataset for the following paper:
+[Summarizing Community-based Question-Answer Pairs](https://aclanthology.org/2022.emnlp-main.250.pdf)
+
+```
+@inproceedings{hsu-etal-2022-summarizing,
+    title = "Summarizing Community-based Question-Answer Pairs",
+    author = "Hsu, Ting-Yao  and
+      Suhara, Yoshi  and
+      Wang, Xiaolan",
+    booktitle = "Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing",
+    month = dec,
+    year = "2022",
+    address = "Abu Dhabi, United Arab Emirates",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2022.emnlp-main.250",
+    pages = "3798--3808",
+    abstract = "Community-based Question Answering (CQA), which allows users to acquire their desired information, has increasingly become an essential component of online services in various domains such as E-commerce, travel, and dining. However, an overwhelming number of CQA pairs makes it difficult for users without particular intent to find useful information spread over CQA pairs. To help users quickly digest the key information, we propose the novel CQA summarization task that aims to create a concise summary from CQA pairs. To this end, we first design a multi-stage data annotation process and create a benchmark dataset, COQASUM, based on the Amazon QA corpus. We then compare a collection of extractive and abstractive summarization methods and establish a strong baseline approach DedupLED for the CQA summarization task. Our experiment further confirms two key challenges, sentence-type transfer and deduplication removal, towards the CQA summarization task. Our data and code are publicly available.",
+}
+```
 
 QA summarization is the task of making a summary from multiple Question-Answer (QA) pairs about a single product. The most challenging part is that salient information is often spread in question and answer, so the model has to appropriately extract salient information from multiple QA pairs. 
 
-The dataset is based on the Amazon QA datset (link).
+The dataset is based on the [Amazon QA datset](https://jmcauley.ucsd.edu/data/amazon/qa/).
 
 
 ## Annotation Framework
@@ -46,6 +41,7 @@ TODO: Probably, it's better to make the Summary writing step Step 2 instead of S
 
 ## Benchmark datasets 
 
+We selected 1,440 entities from 17 product categories with 39,485 input QA pairs and 1,440 reference summaries.
 
 ## Data Format 
 
