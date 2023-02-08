@@ -1,8 +1,11 @@
 # CoQASUM
 
 <!-- This is the repo for paper Semantic Frame Forecasting (NAACL 2021). -->
-This respository hosts a benchmark dataset for the following paper:
+This respository hosts a benchmark dataset and code for the following paper:
+
 [Summarizing Community-based Question-Answer Pairs](https://aclanthology.org/2022.emnlp-main.250.pdf)
+
+CoQA summarization is the task of making a summary from multiple Community-based Question-Answer (QA) pairs about a single product. The most challenging part is that salient information is often spread in question and answer, so the model has to appropriately extract salient information from multiple QA pairs. 
 
 ```
 @inproceedings{hsu-etal-2022-summarizing,
@@ -21,11 +24,6 @@ This respository hosts a benchmark dataset for the following paper:
 }
 ```
 
-QA summarization is the task of making a summary from multiple Question-Answer (QA) pairs about a single product. The most challenging part is that salient information is often spread in question and answer, so the model has to appropriately extract salient information from multiple QA pairs. 
-
-The dataset is based on the [Amazon QA datset](https://jmcauley.ucsd.edu/data/amazon/qa/).
-
-
 ## Annotation Framework
 
 Since collecting summaries for a large number of QA pairs is not feasible, <DATASETNAME> employed an annotation framework that consists of the following 3 steps. 
@@ -41,7 +39,7 @@ TODO: Probably, it's better to make the Summary writing step Step 2 instead of S
 
 ## Benchmark datasets 
 
-We selected 1,440 entities from 17 product categories with 39,485 input QA pairs and 1,440 reference summaries.
+The dataset is based on the [Amazon QA datset](https://jmcauley.ucsd.edu/data/amazon/qa/). We selected 1,440 entities from 17 product categories with 39,485 input QA pairs and 1,440 reference summaries. You can find the data in `CoQASUM` folder.
 
 ## Data Format 
 
