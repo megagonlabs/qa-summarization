@@ -65,7 +65,7 @@ The JSON schema is described below.
         - `edit (str)`: Edited sentence in a declartive form.
         - `is_selected (bool)`: True if the edited sentence was used for the summary writing task. False otherwise. 
         - `error_score (int)`: Higher `error_score` indicates the sentence has more issues. 
-        - `wid (str)`: Worker ID.
+        - `wid (str)`: Worker ID. (mask ID)
     - `summary (List[str])`: Reference summary written in the summary writing task. 
 
 (*1) Each dictionary in `qa_pair` has either `annotation` or `post_collection`.  If one has `annotation`, the QA pair was shown to annotators for the first QA rewriting task. If an entry does not have `annotation`, it means that the entry was collected through the QA-pair enrichment step. Then, the entry should have `post_collection`, which contains the original QA pair ID and the method that were used to collect the entry. 
@@ -91,20 +91,20 @@ The JSON schema is described below.
                             "edit": "The dimensions for the puzzle space are 32\" x 21.75\"",
                             "is_selected": "False",
                             "error score": 0,
-                            "wid": "A12DXWDNOBY503"
+                            "wid": "IuDKEOxD7N7iOF"
                         },
                         {
                             "edit": " THE DIMENSIONS FOR THE PUZZLE SPACE ARE 32\" X 21.75\"",
                             "is_selected": "False",
                             "error score": 1,
-                            "wid": "A3D1PXOYFFN1MM"
+                            "wid": "6qLL1_bRaFHSIh"
                         },
                         ...
                         {
                             "edit": "The dimensions of the puzzle space are 32\" X 21.75\"",
                             "is_selected": "True",
                             "error score": 0,
-                            "wid": "A1ZTCXQ6JAT7E8"
+                            "wid": "spnQ-83EcLTu2W"
                         }
                     ]
                 }
