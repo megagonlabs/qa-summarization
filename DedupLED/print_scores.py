@@ -1,6 +1,7 @@
 import json
 import sys
 
+
 if __name__ == "__main__":
     score_names = [
         "test_rouge-1_p",
