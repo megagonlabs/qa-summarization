@@ -28,7 +28,7 @@ CoQA summarization is the task of making a summary from multiple Community-based
 
 Since collecting summaries for a large number of QA pairs is not feasible, <DATASETNAME> employed an annotation framework that consists of the following 3 steps. 
 
-- **Step 1 (QA rewriting)**: Annotators rewrite each QA pair into sentences in a declarative form.
+- **Step 1 (Select Seed QA & rewriting)**: Heuristically select representative QA pairs from the original corpus. Then annotators rewrite each QA pair into sentences in a declarative form.
 - **Step 2 (Summary writing)**: Annotators write a summary from sentences edited in Step 1.
 - **Step 3 (Input QA pair enrichment)**: Additional QA pairs that are semantically similar to the QA pairs used in Steps 1 and 2 were collected.
 
@@ -39,7 +39,7 @@ Since collecting summaries for a large number of QA pairs is not feasible, <DATA
 
 ## Benchmark datasets 
 
-The dataset is based on the [Amazon QA datset](https://jmcauley.ucsd.edu/data/amazon/qa/). We selected 1,440 entities from 17 product categories with 39,485 input QA pairs and 1,440 reference summaries. You can find the data in `CoQASUM` folder.
+The dataset is based on the [Amazon QA datset](https://jmcauley.ucsd.edu/data/amazon/qa/). We selected `1,440` entities from `17` product categories with `39,485` input QA pairs and `1,440` reference summaries. You can find the data in `CoQASUM` folder.
 
 ## Data Format 
 
