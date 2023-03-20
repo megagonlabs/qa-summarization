@@ -37,7 +37,7 @@ Since collecting summaries for a large number of QA pairs is not feasible, <DATA
 
 ## Benchmark datasets 
 
-The dataset is based on the [Amazon QA datset](https://jmcauley.ucsd.edu/data/amazon/qa/). We selected `1,440` entities from `17` product categories with `39,485` input QA pairs and `1,440` reference summaries. You can find the data in `CoQASUM` folder.
+The dataset is based on the [Amazon QA datset](https://jmcauley.ucsd.edu/data/amazon/qa/). We selected `1,440` entities from `17` product categories with `39,485` input QA pairs and `1,440` reference summaries. We only release the rewritten qa pairs and the summaries we collected and provide scripts to extract qa data from original Amazon QA datset (Questions with multiple answers). You can find the script in `CoQASUM` folder.
 
 ## Data Format 
 
