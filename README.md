@@ -59,7 +59,6 @@ The JSON file contains a list of dictionary objects (`List[Dict]`), each of whic
 The JSON schema is described below. 
 
 - `asin (str)`: Product ID 
-- `url (str)`:
 - `category (str)`
 - `qa_pair (List[Dict])`:
     - `qid (str)`: Question ID
@@ -67,84 +66,13 @@ The JSON schema is described below.
     - `questionType (str)`: {"open-ended", "yes/no"}
     - `question (str)`: The original question text
     - `answer (str)`: The original answer text
-    - `qa_index (int)`: The index of QA pair for the question (0 origin).
-    - `post_collection(Dict)`: (*1)
-        - `original_qa (str)`: The original QA pair ID that was used to collect this QA pair. 
-        - `method (str)`: The method that was used to collect this QA pair.     
-    - `annotation (List[Dict])`: (*1)
+    - `qa_index (int)`: The index of QA pair for the question (0 origin).   
+    - `annotation (List[Dict])`:
         - `edit (str)`: Edited sentence in a declartive form.
         - `is_selected (bool)`: True if the edited sentence was used for the summary writing task. False otherwise. 
         - `error_score (int)`: Higher `error_score` indicates the sentence has more issues. 
-        - `wid (str)`: Worker ID. (mask ID)
+        - `wid (str)`: Worker ID.
     - `summary (List[str])`: Reference summary written in the summary writing task. 
-
-(*1) Each dictionary in `qa_pair` has either `annotation` or `post_collection`.  If one has `annotation`, the QA pair was shown to annotators for the first QA rewriting task. If an entry does not have `annotation`, it means that the entry was collected through the QA-pair enrichment step. Then, the entry should have `post_collection`, which contains the original QA pair ID and the method that were used to collect the entry. 
-
-```json
-[
-    {
-        "asin": "B000FCURJC"
-        "url": ""
-        "category": "Toys_and_Games",
-        "qa_pair": [
-            {
-                "qid": "A27L01Z2L7C6TW#0",
-                "qaid": "A27L01Z2L7C6TW#0_A37E4725NQUAAR#0"
-                "questionType": "open-ended",
-                "question": "What are the dimensions of the puzzle space?",
-                "answer": "THE DIMENSIONS FOR THE PUZZLE SPACE ARE 32\" X 21.75\"",
-                "post_collection": null,
-                "qa_index": 0,
-                "annotation": {
-                    "rewrite": [
-                        {
-                            "edit": "The dimensions for the puzzle space are 32\" x 21.75\"",
-                            "is_selected": "False",
-                            "error score": 0,
-                            "wid": "IuDKEOxD7N7iOF"
-                        },
-                        {
-                            "edit": " THE DIMENSIONS FOR THE PUZZLE SPACE ARE 32\" X 21.75\"",
-                            "is_selected": "False",
-                            "error score": 1,
-                            "wid": "6qLL1_bRaFHSIh"
-                        },
-                        ...
-                        {
-                            "edit": "The dimensions of the puzzle space are 32\" X 21.75\"",
-                            "is_selected": "True",
-                            "error score": 0,
-                            "wid": "spnQ-83EcLTu2W"
-                        }
-                    ]
-                }
-            },
-            {
-                "qid": "A27L01Z2L7C6TW#0",
-                "qaid": "A27L01Z2L7C6TW#0_A37E4725NQUAAR#0",
-                "questionType": "open-ended",
-                "question": "What are the dimensions of the puzzle space?",
-                "answer": "22x62 which includes the extensions",
-                "post_collection": {
-                    "original_qa": "A27L01Z2L7C6TW#0_A37E4725NQUAAR#0",
-                    "method": "same_q_similar_a_lcs_0.1"
-                }
-            },
-            ...
-        "summary": [
-            "The product is several rigid boards. The pieces can be arranged in the middle and on two side pieces. Pick up the side pieces to place them atop the middle area before folding the wings in. The mat will holds puzzles that have up to 1000 pieces. A 24 x 30 inch puzzle could be too small for the product to hold. The 1500 size should be used. Each side pieces are 16\" wide and the two inserts are 15-1/4 wide. The size of the closed unit is 32.25 x 22. If the center area for putting the puzzle together is in, then the leftover pieces should go on the 2 pieces that fit on top of the puzzle when the product is close up."
-        ]
-    },
-    {
-        "asin": "B000FKCYAO",
-        "url": "",
-        "category": "Toys_and_Games",
-        "qa_pair": [
-            ...
-        ]
-    }            
-]
-```
 
 ## Sample code
 
