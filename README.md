@@ -153,5 +153,5 @@ All dataset and code used within the product are listed below (including their c
 
 | ID  | Dataset | Modified | Copyright Holder | Source Link  | License |
 |-----|---------------------|----------|------------------------|----------------------------------------------------------|---------|
-| 1 | CoQASUM | No  |  | [source](https://github.com/megagonlabs/qa-summarization) generated from [Amazon QA data](https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/qa/) | |
+| 1 | CoQASUM | No  |  | [source](https://github.com/megagonlabs/qa-summarization) collected from [Amazon QA data](https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/qa/) | |
 
