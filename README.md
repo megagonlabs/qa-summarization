@@ -53,7 +53,7 @@ After this step, you can find experimental files under "CoQASUM/".
 
 ## Data Format 
 
-`amazon_qa_summary_filtered.json` contains all types of annotations and the original QA data.
+`qa_summary_filtered.json` contains all types of annotations and the original QA data.
 
 The JSON file contains a list of dictionary objects (`List[Dict]`), each of which corresponds to one product.
 The JSON schema is described below. 
