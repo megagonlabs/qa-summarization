@@ -55,13 +55,13 @@ class QASumPreSplitDataModule(LightningDataModule):
         super().__init__()
         self.tokenizer = tokenizer
         if train_json_filepath is None:
-            train_json_filepath = "../amazon_qa_dataset/qa_summary_filtered_train.json"
+            train_json_filepath = "../CoQASUM/qa_summary_filtered_train.json"
         assert os.path.exists(train_json_filepath)
         if valid_json_filepath is None:
-            valid_json_filepath = "../amazon_qa_dataset/qa_summary_filtered_val.json"
+            valid_json_filepath = "../CoQASUM/qa_summary_filtered_val.json"
         assert os.path.exists(valid_json_filepath), valid_json_filepath
         if test_json_filepath is None:
-            test_json_filepath = "../amazon_qa_dataset/qa_summary_filtered_test.json"
+            test_json_filepath = "../CoQASUM/qa_summary_filtered_test.json"
         assert os.path.exists(test_json_filepath)
 
         self.train_json_filepath = train_json_filepath
@@ -280,7 +280,7 @@ class QASumDataModule(LightningDataModule):
         self.tokenizer = tokenizer
 
         if json_filepath is None:
-            json_filepath = "../amazon_qa_dataset/amazon_qa_summary_filtered.json"  # TODO
+            json_filepath = "../CoQASUM/qa_summary_filtered.json"  # TODO
         assert os.path.exists(json_filepath)
 
         self.json_filepath = json_filepath
