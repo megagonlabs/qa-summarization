@@ -39,6 +39,16 @@ Since collecting summaries for a large number of QA pairs is not feasible, <DATA
 
 The dataset is based on the [Amazon QA datset](https://jmcauley.ucsd.edu/data/amazon/qa/). We selected `1,440` entities from `17` product categories with `39,485` input QA pairs and `1,440` reference summaries. We only release the rewritten qa pairs and the summaries we collected and provide scripts to extract qa data from original Amazon QA datset (Questions with multiple answers). You can find the script in `CoQASUM` folder.
 
+- Download original Amazon QA datset and put in under CoQASUM/
+- Extract all QA data and get Train/Dev/Test files
+
+```
+python3 extract_qa.py
+```
+
+After this step, you can find experimental files under "CoQASUM/".
+
+
 ## Data Format 
 
 `amazon_qa_summary_filtered.json` contains all types of annotations and the original QA data.
